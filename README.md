@@ -313,3 +313,10 @@ With PVC:
 ✅ Data in PVC lives beyond pod lifecycle — until PVC is deleted.
 ✅ Container runtimes create mount paths if missing.
 ✅ Always match volumeMount.name and volumes.name.
+
+
+In Kubernetes, mounts are defined under two sections:
+
+volumes: (defines the source)
+
+volumeMounts: (defines where inside the container)
