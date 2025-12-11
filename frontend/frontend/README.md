@@ -39,6 +39,56 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
+### DOCKER VOLUMES
+
+**We earlier saw that, whenever we build the image and start container and then modify the source code again, those changes are not reflected into the running container and to make it reflect inside the running container, we make use of "DOCKER VOLUMES"**
+
+
+```bash
+$ docker run -p 3000:3000 -v $(pwd):/app <imageID>
+```
+it will map, "pwd" content into "/app" dir inside the container
+
+But for nodejs application to run, we need node_modules dir where are the dependencies downloaded were present and we deleted the copy that was present on host machine and it;s only present inside the container.
+
+
+However, when we use -v to map host filesystem into container, the container filesystem got overwritten and now node_modules dir is not available in the container as well.
+
+In order to solve this proble, we need to map the node_module dir of container again and now the updated command will be 
+
+```bash
+$ docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <imageID>
+```
+
+```bash
+$ docker build -f Dockerfile.dev .
+$ docker run -it <image_id> npm run test  # to execute the tests inside the container
+```
+
+To run automatic tests inside the container, once tests on modified inside the test files present on the host system, we need to:
+
+
+```
+$ docker-compose up
+
+$ docker exec -it <container_ID_from_above_step> npm run test  # reuse the existing container
+```
+
+But this is a hectic process and not recommended.
+
+ and that's why, we add one more server into the docker-compose yaml and execute the tests from that container.
+
+
+#### For production setups, we need to have the images with minimal dependencies and that's why production nodejs application, we will make use of "MULTI-STAGE DOCKER BUILDS"
+
+In first stage, we use nodejs base image and install all the dependencies and packages required to run the application.
+
+And in second stage, we will use nginx base image to only forward the requests and reponses between clients and server respectively and will copy only build files generated in the first stage.
+
+***NGINX is mostly used for serving web pages in production environments***
+
+
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
