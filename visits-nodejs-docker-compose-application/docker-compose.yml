@@ -1,10 +1,9 @@
-version: '3'
-services:
-  redis-server:
-    image: 'redis'
-  node-app:
-    restart: on-failure
-    build: .
-    ports:
-      - '4001:8081'
-
+version: '3' # version of docker-compose to be used
+services:    # we need to list the containers we need build
+  redis-server:   # name of the first container
+    image: 'redis'  # image to be used to build that container	
+  node-app:      # name of the second container
+    restart: always  # to restart container, if it crashes for any reason
+    build: .     # here we asking to use the Dockerfile present in pwd to build image
+	ports:
+	  - "4001:8081"  # port mapping with 4001 on localhost to 8081 on container
