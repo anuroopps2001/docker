@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  docker
+
+before_install:
+  - docker build -t anuroopps/docker -f Dockerfile.dev .
+
+script:
+  - docker rum -e CI=true anuroopps/docker npm run test

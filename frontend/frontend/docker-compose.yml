@@ -5,7 +5,7 @@ services:
       context: .  # same as build context, i.e the place where all application related files and Dockerfile exists in docker alone
       dockerfile: Dockerfile.dev
     ports: 
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - /app/node_modules
       - .:/app
