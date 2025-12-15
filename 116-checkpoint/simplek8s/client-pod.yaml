@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client-pod 
+  labels:
+    component: web
+spec:
+  containers:
+    - name: client
+      image: docker.io/stephengrider/multi-client:vprad
+      ports:
+        - containerPort: 3000   # The port on which application was exposed inside the container
