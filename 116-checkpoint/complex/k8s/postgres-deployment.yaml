@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim    # saying k8s, I need PV based on specs specified inside this perticular PVC
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+          - containerPort: 5432
+          volumeMounts:
+            - name: postgres-storage  # The name here and the volume name in volume sections should indentical, because we want that volume to be mounted inside container
+              mountPath: /var/lib/postgresql             # specifies the location inside container, where this volume will be availablea and psql writes data in this location usually
+              subPath: postgres      # subPath lets you mount only a specific file or folder from a volume, instead of mounting the entire volume into the container.
+          env:
+            - name: POSTGRES_PASSWORD   # variable container will be using
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password   # secret name
+                  key: MYPGPASSWORD    # key value inside the secret

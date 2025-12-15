@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: web
+  ports:
+    - port: 3050   # specifies what port other pods inside the cluster can connect to this service managed pods
+      targetPort: 3000  # specifies the target port inside the container
