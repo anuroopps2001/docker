@@ -18,7 +18,7 @@ spec:
             claimName: database-persistent-volume-claim    # saying k8s, I need PV based on specs specified inside this perticular PVC
       containers:
         - name: postgres
-          image: postgres
+          image: postgres:10
           ports:
           - containerPort: 5432
           volumeMounts:
